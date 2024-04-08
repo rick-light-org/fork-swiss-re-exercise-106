@@ -33,9 +33,9 @@ mvn test
 
 
 ## Check control
-Data inserted in the CSV file has to be  consistent(to each managerId in the CSV file has to correspond an Employee id)
+- Data inserted in the CSV file has to be  consistent(to each managerId in the CSV file has to correspond an Employee id)
 
-Loops in the tree are not accepted
+- Loops in the tree are not accepted
 
 
 
