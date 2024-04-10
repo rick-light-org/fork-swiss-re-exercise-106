@@ -1,6 +1,8 @@
 package com.swissre.exercise;
 
 import com.swissre.exercise.dto.Employee;
+import com.swissre.exercise.dto.output.EmployeeOutputOutstandingAverage;
+import com.swissre.exercise.dto.output.EmployeeTooNestedLevel;
 import com.swissre.exercise.service.*;
 import com.swissre.exercise.service.calculator.AverageSalaryCalculator;
 import com.swissre.exercise.service.calculator.NestedLevelCalculator;
@@ -38,13 +40,13 @@ public class Application {
         Collection<Employee> employeesTree = treeBuilder.build(employees);
 
         //calculate too nested employees(In this phase I check also if there are cyclic redundancies in the input data)
-        Collection<Employee> tooNestedEmployees = employeeAnalyser.getListEmployeesTooNested(employeesTree);
+        Collection<EmployeeTooNestedLevel> tooNestedEmployees = employeeAnalyser.getListEmployeesTooNested(employeesTree);
 
         //calculate managers with smaller salary
-        Collection<Employee> managersWithSmallSalary = employeeAnalyser.getListManagersWithSmallSalary(employeesTree);
+        Collection<EmployeeOutputOutstandingAverage> managersWithSmallSalary = employeeAnalyser.getListManagersWithSmallSalary(employeesTree);
 
         //calculate managers with bigger salary
-        Collection<Employee> managersWithBigSalary = employeeAnalyser.getListManagersWithBigSalary(employeesTree);
+        Collection<EmployeeOutputOutstandingAverage> managersWithBigSalary = employeeAnalyser.getListManagersWithBigSalary(employeesTree);
 
         //print results
         printer.print(managersWithSmallSalary, managersWithBigSalary, tooNestedEmployees);
@@ -60,10 +62,14 @@ public class Application {
         EmployeeAnalyser analyser = new EmployeeAnalyserImpl(
                 new AboveAverageSalaryPredicate(properties, averageSalaryCalculator),
                 new BelowAverageSalaryPredicate(properties, averageSalaryCalculator),
-                new NestedLevelPredicate(properties, nestedLevelCalculator)
+                new NestedLevelPredicate(properties, nestedLevelCalculator),
+                new AverageSalaryCalculator(),
+                new NestedLevelCalculator(),
+                properties
+
         );
 
-        ConsolePrinter printer = new ConsolePrinter(averageSalaryCalculator, nestedLevelCalculator,properties);
+        ConsolePrinter printer = new ConsolePrinter();
         Application app = new Application(csvReader, new TreeBuilderImpl(), printer, analyser);
         app.run(Path.of("src/main/resources/swiss-re-20.csv"));
     }

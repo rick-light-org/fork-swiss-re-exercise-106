@@ -74,7 +74,7 @@ class NestedLevelPredicateTest {
     }
 
     @Test
-    void test_whenLevelIsMoreThanFour_shouldReturnFalse() {
+    void test_whenLevelIsMoreThanFour_shouldReturnTrue() {
         Employee subordinate = EmployeeFactory.builder()
                 .withId(6)
                 .build();
